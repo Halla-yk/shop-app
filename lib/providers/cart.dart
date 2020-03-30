@@ -14,11 +14,12 @@ class CartItem {
 }
 
 class Cart with ChangeNotifier {
-  Map<String, CartItem> _items;
-
+  Map<String, CartItem> _items={};//بستخدم ال  map علشان اربط اشيين مع بعض
   Map<String, CartItem> get items {
     return {..._items};
   }
+
+
 //هون استخدمنا ال map  وال productId  ك value  علشان الاضافة وتزويد ال quantity عن طريق زر ال cart  اللي بال product مش عن طريق زر plus موجود بال cartItem
   //لو كان في زر plus كنت بقدر اعمل list مش  map  وكنت ببحث عن ازا ال cart item  موجود عن طريق ال id تبعه باستخدام for each
   void addItem(String productId, double price, String title) {
@@ -32,7 +33,7 @@ class Cart with ChangeNotifier {
               quantity: existingCartItem.quantity + 1));//199
       //change quantity
     } else {
-      _items.putIfAbsent(
+      _items.putIfAbsent(//بتضيف key و value
           productId,
           () => CartItem(
               id: DateTime.now().toString(),
@@ -40,5 +41,26 @@ class Cart with ChangeNotifier {
               price: price,
               quantity: 1));
     }
+    notifyListeners();
   }
+  int get itemCount{
+    return _items.length;//بترجع عدد ال product بدون ال quantity
+  }
+  double get totalAmount{
+    var total = 0.0;
+    _items.forEach((product, cartItem) {
+      total+= cartItem.price*cartItem.quantity;
+    });
+    return total;
+  }
+  
+  void removeItem(String productId) {
+    _items.remove(productId);
+    notifyListeners();
+  }
+
+  void clear(){
+    _items = {};
+}
+  
 }

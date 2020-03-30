@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../screens/product_detail_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/product.dart';
-
+import '../providers/cart.dart';
 class ProductItem extends StatelessWidget {
 //  final String id;
 //  final String title;
@@ -16,6 +16,7 @@ class ProductItem extends StatelessWidget {
     final product = Provider.of<Product>(context,
         listen:
             false); //خليتها علشان بدي ءاخد data من ال  product بس عملت ال listen false علشان ما بدي يعمل rebuild لكل ال widget
+    final cart  = Provider.of<Cart>(context, listen: false);
     return GridTile(
       child: GestureDetector(
         onTap: () {
@@ -44,7 +45,9 @@ class ProductItem extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           trailing:
-              IconButton(icon: Icon(Icons.shopping_cart), onPressed: () => {}),
+              IconButton(icon: Icon(Icons.shopping_cart), onPressed: () => {
+                cart.addItem(product.id,product.price,product.title)
+              }),
         ),
       ),
     );
